@@ -18,7 +18,9 @@ def friend_cursor(user)
 end
 
 def friend_objects(user)
-  friend_cursor(user).take(5)
+  n = 10
+  puts "#{n} friends of #{user.username}"
+  friend_cursor(user).take(n)
 end
 
 def user_links(user)
