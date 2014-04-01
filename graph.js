@@ -7,8 +7,7 @@ $.get('main.json').done(function(links) {
 	link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
     });
 
-    var width = 960,
-    height = 500;
+    var width = 1024, height = 600;
 
     var force = d3.layout.force()
 	.nodes(d3.values(nodes))

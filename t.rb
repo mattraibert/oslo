@@ -13,14 +13,22 @@ def mentions(tweets)
 end
 
 def friend_cursor(user)
+  puts "lookup friends for #{user.username}"
   @friend_cursors ||= {}
   @friend_cursors[user.username] ||= client.friends(user.username)
 end
 
-def friend_objects(user)
-  n = 10
-  puts "#{n} friends of #{user.username}"
-  friend_cursor(user).take(n)
+def friend_objects(user, n = 300)
+  unless n <= 0
+    puts "#{n} friends of #{user.username}"
+    begin
+      friend_cursor(user).take(n)
+    rescue Twitter::Error::TooManyRequests => e
+      friend_objects(user, n / 2)
+    end
+  else
+    []
+  end
 end
 
 def user_links(user)
@@ -34,13 +42,17 @@ def user_links2(user)
 end
 
 def write_json(data)
-  File.write('foo.json', data.to_json)
+  File.write('friends.json', data.to_json)
 end
 
-def main
+def request_data
   write_json(user_links(client.user) + user_links2(client.user))
 end
 
 def main_json
-  (user_links(client.user) + user_links2(client.user)).to_json
+  if File.exist? 'friends.json'
+    File.read('friends.json') 
+  else
+    ""
+  end
 end
