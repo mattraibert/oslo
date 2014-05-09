@@ -42,5 +42,5 @@ def main
 end
 
 def main_json
-  (user_links(client.user) + user_links2(client.user)).to_json
+  File.read('foo.json')
 end

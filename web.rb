@@ -1,15 +1,9 @@
 require 'sinatra'
-require './t'
+require './tstream'
+
+set :bind, '0.0.0.0'
 
 get '/main.json' do
   content_type :json
-  main_json
-end
-
-get '/main' do
-  File.read('tweet_graph.html')
-end
-
-get '/graph.js' do
-  File.read('graph.js')
+  Tstream::track.map {|t| {username: t.user.username, text: t.text }}.to_json
 end
